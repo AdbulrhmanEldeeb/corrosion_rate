@@ -12,7 +12,7 @@ st.set_page_config(page_title="Corrosion Classifier", layout="wide")
 with st.sidebar:
     st.image("https://www.ddcoatings.co.uk/wp-content/uploads/2019/09/pipeline-corrosion.jpg", use_container_width=True)
     st.markdown("## 🧪 Corrosion Classifier")
-    st.markdown("Predict the **corrosion class** based on material and environment conditions.")
+    st.markdown("Predict the **corrosion rate** based on material and environment conditions.")
     st.markdown("---")
     st.markdown("🔬 Powered by ML | 📊 PCA | 🌐 TF-IDF")
 
@@ -31,8 +31,8 @@ categorical_columns = ['Environment']
 not_compose_columns = ['Environment', 'UNS', 'Temperature (deg C)', 'Concentration_clean']
 
 # --- Page Title ---
-st.markdown("<h1 style='text-align: center;'>🔍 Corrosion Rate Classification</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align: center; font-size: 18px;'>Fill in the details below to predict the corrosion class of a material.</p>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center;'>🔍 Corrosion Rate Prediction</h1>", unsafe_allow_html=True)
+st.markdown("<p style='text-align: center; font-size: 18px;'>Fill in the details below to predict the corrosion rate of a material.</p>", unsafe_allow_html=True)
 
 # --- Input Form ---
 with st.form("corrosion_form"):
@@ -59,7 +59,6 @@ def get_tfidf_features(comment):
 
 # --- Prediction Pipeline ---
 if submitted:
-    st.markdown("### 🔄 Processing Input...")
     
     # Clean and encode text
     comment_clean = clean_condition_text(comment)
