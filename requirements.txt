@@ -2,5 +2,6 @@ joblib==1.4.2
 scikit-learn==1.6.1
 pandas==2.2.3
 streamlit==1.44.1
-lightgbm==4.6.0
 category_encoders==2.8.1
+transformers==4.51.3
+torch==2.6.0
