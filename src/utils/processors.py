@@ -4,6 +4,7 @@ import pandas as pd
 from transformers import AutoTokenizer, AutoModel
 import torch
 
+
 def clean_condition_text(text):
 
     text = text.lower()
@@ -56,6 +57,7 @@ def build_final_input(
 model_name = "allenai/scibert_scivocab_uncased"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModel.from_pretrained(model_name)
+
 
 def get_scibert_embedding(text):
     inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=128)

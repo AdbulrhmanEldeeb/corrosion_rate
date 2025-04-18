@@ -2,9 +2,14 @@ import pandas as pd
 import numpy as np
 import joblib
 from utils.processors import clean_condition_text, get_scibert_embedding
-from config.config import BASE_PATH, MODEL_PATHS, NOT_COMPOSE_COLUMNS, CATEGORICAL_COLUMNS
+from config.config import (
+    BASE_PATH,
+    MODEL_PATHS,
+    NOT_COMPOSE_COLUMNS,
+    CATEGORICAL_COLUMNS,
+)
 from utils.vars import targets
-import streamlit as st 
+import streamlit as st
 
 
 class CorrosionClassifier:
@@ -22,27 +27,40 @@ class CorrosionClassifier:
             "temp_scaler": joblib.load(MODEL_PATHS["temp_scaler"]),
         }
 
-    def preprocess_input(self, env: str, temp: float, conc: float, uns_input: str, comment: str):
+    def preprocess_input(
+        self, env: str, temp: float, conc: float, uns_input: str, comment: str
+    ):
         """Preprocess inputs into model-ready format."""
         # Build input DataFrame
-        input_df = pd.DataFrame([{
-            "Environment": env,
-            "Temperature (deg C)": temp,
-            "Concentration_clean": conc,
-            "UNS": uns_input,
-        }])
+        input_df = pd.DataFrame(
+            [
+                {
+                    "Environment": env,
+                    "Temperature (deg C)": temp,
+                    "Concentration_clean": conc,
+                    "UNS": uns_input,
+                }
+            ]
+        )
 
         # Encode categorical variables
-        input_df["Environment"] = self.models["env_encoder"].transform(input_df["Environment"])
+        input_df["Environment"] = self.models["env_encoder"].transform(
+            input_df["Environment"]
+        )
         input_df["UNS"] = self.models["uns_encoder"].transform(input_df["UNS"])
 
         # Scale temperature
-        input_df["Temperature (deg C)"] = self.models["temp_scaler"].transform(input_df[["Temperature (deg C)"]])
+        input_df["Temperature (deg C)"] = self.models["temp_scaler"].transform(
+            input_df[["Temperature (deg C)"]]
+        )
 
         # Process condition text using SciBERT
         cleaned_comment = clean_condition_text(comment)
         scibert_embedding = np.squeeze(get_scibert_embedding(cleaned_comment))
-        scibert_df = pd.DataFrame([scibert_embedding], columns=[f"scibert_{i}" for i in range(len(scibert_embedding))])
+        scibert_df = pd.DataFrame(
+            [scibert_embedding],
+            columns=[f"scibert_{i}" for i in range(len(scibert_embedding))],
+        )
 
         # PCA transformation
         pca_emb = self.models["pca"].transform(scibert_df)
