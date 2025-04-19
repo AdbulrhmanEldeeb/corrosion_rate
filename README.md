@@ -54,7 +54,7 @@ You can try the app by visiting the following link:
     streamlit run app.py
     ```
 ## 📂 Project Structure
-
+```
 ├── app.py                    # Main Streamlit application
 ├── utils/
 │   ├── predictor.py          # CorrosionClassifier class
@@ -66,7 +66,7 @@ You can try the app by visiting the following link:
 │   └── config.py             # App-wide constants (e.g., logo, icons)
 ├── requirements.txt
 └── README.md
-
+```
 
 ---
 
