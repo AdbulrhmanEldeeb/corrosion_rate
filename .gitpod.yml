@@ -1,3 +1,13 @@
+image:
+  file: .gitpod.Dockerfile
+
+tasks:
+  - name: Start App
+    command: python src/main.py
+
+ports:
+  - port: 8501
+    onOpen: open-preview
 
 
 
