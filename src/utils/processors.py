@@ -3,6 +3,8 @@ import numpy as np
 import pandas as pd
 from transformers import AutoTokenizer, AutoModel
 import torch
+import hashlib
+import streamlit as st
 
 
 def clean_condition_text(text):
@@ -63,3 +65,11 @@ def get_scibert_embedding(text):
     inputs = tokenizer(text, return_tensors="pt", truncation=True, max_length=128)
     outputs = model(**inputs)
     return outputs.last_hidden_state.mean(dim=1).detach().numpy()
+
+
+@st.cache_data
+def get_cached_scibert_embedding(text):
+    """Cache SciBERT embedding using text hash as a key."""
+    # Use a hash to ensure compatibility with caching
+    text_hash = hashlib.md5(text.encode()).hexdigest()
+    return get_scibert_embedding(text)

@@ -7,6 +7,7 @@ from utils.predictor import CorrosionClassifier
 from utils.processors import build_final_input
 from utils.vars import environment, uns_nums
 from config.config import SIDEBAR_IMAGE, PAGE_ICON
+from chat.chat import invoke_llm
 
 st.set_page_config(
     page_title="Corrosion Classifier", layout="wide", page_icon=PAGE_ICON
@@ -76,14 +77,45 @@ with st.form("corrosion_form"):
 
     submitted = st.form_submit_button("🚀 Predict corrosion rate")
 
+if "prediction_data" in st.session_state:
+    st.markdown("## 🗞 Prediction Result")
+    st.success(
+        f"✅ Predicted Corrosion Rate: **{st.session_state.prediction_data['Predicted Corrosion Rate'][0]}**"
+    )
+
+    st.markdown("### 🧠 AI Recommendations for Corrosion Control")
+    st.markdown(st.session_state.llm_output)
+
+    # CSV Download
+    csv_bytes = st.session_state.prediction_data.to_csv(index=False).encode("utf-8")
+    st.download_button(
+        label="💾 Download Input, Prediction and Recommendations as CSV",
+        data=csv_bytes,
+        file_name="corrosion_prediction.csv",
+        mime="text/csv",
+    )
+
+    # TXT Download
+    txt_content = "Corrosion Prediction Report\n\n"
+    txt_content += "Input Parameters:\n"
+    for col in st.session_state.prediction_data.columns:
+        if col != "AI Recommendations":
+            value = st.session_state.prediction_data[col].values[0]
+            txt_content += f"{col}: {value}\n"
+    txt_content += "\nAI Recommendations:\n"
+    txt_content += st.session_state.llm_output
+    txt_bytes = txt_content.encode("utf-8")
+
+    st.download_button(
+        label="📄 Download AI Recommendations as TXT",
+        data=txt_bytes,
+        file_name="corrosion_recommendations.txt",
+        mime="text/plain",
+    )
+
 # ------------------------ Prediction & Output ------------------------
 if submitted:
     prediction, _ = clf.predict(env, temp, conc, uns_input, comment)
-
-    st.markdown("## 🗞 Prediction Result")
-    st.success(f"✅ **Predicted Corrosion Class**: `{prediction}`")
-
-    # Prepare raw input + prediction for download
     raw_input = pd.DataFrame(
         [
             {
@@ -97,16 +129,12 @@ if submitted:
         ]
     )
 
-    # Download raw input + prediction
-    csv_bytes = raw_input.to_csv(index=False).encode("utf-8")
-    st.download_button(
-        label="💾 Download Input + Prediction as CSV",
-        data=csv_bytes,
-        file_name="corrosion_prediction.csv",
-        mime="text/csv",
-    )
+    llm_output = invoke_llm(raw_input)
+    raw_input["AI Recommendations"] = llm_output
 
-    st.markdown("---")
+    # Store in session state
+    st.session_state.prediction_data = raw_input
+    st.session_state.llm_output = llm_output
 
 # ------------------------ Footer ------------------------
 st.markdown("<hr>", unsafe_allow_html=True)

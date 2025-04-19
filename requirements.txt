@@ -5,3 +5,5 @@ streamlit==1.44.1
 category_encoders==2.8.1
 transformers==4.51.3
 torch==2.6.0
+python-dotenv==1.1.0
+langchain_groq==0.3.2

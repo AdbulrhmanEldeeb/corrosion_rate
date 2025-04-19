@@ -1,7 +1,7 @@
 import pandas as pd
 import numpy as np
 import joblib
-from utils.processors import clean_condition_text, get_scibert_embedding
+from utils.processors import clean_condition_text, get_cached_scibert_embedding
 from config.config import (
     BASE_PATH,
     MODEL_PATHS,
@@ -56,7 +56,7 @@ class CorrosionClassifier:
 
         # Process condition text using SciBERT
         cleaned_comment = clean_condition_text(comment)
-        scibert_embedding = np.squeeze(get_scibert_embedding(cleaned_comment))
+        scibert_embedding = np.squeeze(get_cached_scibert_embedding(cleaned_comment))
         scibert_df = pd.DataFrame(
             [scibert_embedding],
             columns=[f"scibert_{i}" for i in range(len(scibert_embedding))],
