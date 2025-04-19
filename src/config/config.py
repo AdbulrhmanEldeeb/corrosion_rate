@@ -24,12 +24,11 @@ PAGE_ICON = "src/assets/images/corrosive.png"
 SIDEBAR_IMAGE = (
     "https://www.ddcoatings.co.uk/wp-content/uploads/2019/09/pipeline-corrosion.jpg"
 )
+meta-llama/llama-4-maverick-17b-128e-instructmeta-llama/llama-4-scout-17b-16e-instruct
 GROQ_MODELS = [
     "llama-3.3-70b-versatile",
     "llama3-70b-8192",
     "deepseek-r1-distill-llama-70b",
-    "meta-llama/llama-4-maverick-17b-128e-instruct"
-    "meta-llama/llama-4-scout-17b-16e-instruct",
-    "mistral-saba-24b",
+    "meta-llama/llama-4-maverick-17b-128e-instruct",
     "qwen-qwq-32b",
 ]
