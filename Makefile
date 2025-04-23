@@ -1,7 +1,7 @@
 # Variables
 PYTHON=python3
 PIP=pip3
-MAIN_SCRIPT=src/main.py
+MAIN_SCRIPT=src/Corrosion_Rate_Prediction_+_Suggesstions.py
 REQ=requirements.txt
 
 .PHONY: install run clean format help

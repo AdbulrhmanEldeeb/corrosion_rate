@@ -7,10 +7,10 @@ from utils.predictor import CorrosionClassifier
 from utils.processors import build_final_input,remove_think_tags
 from utils.vars import environment, uns_nums
 from config.config import SIDEBAR_IMAGE, PAGE_ICON
-from chat.chat import invoke_llm
+from chat.chat import invoke_llm,get_main_prompt
 
 st.set_page_config(
-    page_title="Corrosion Classifier", layout="wide", page_icon=PAGE_ICON
+    page_title="Corrosion Rate Predictor", layout="wide", page_icon=PAGE_ICON
 )
 
 clf = CorrosionClassifier()
@@ -128,8 +128,9 @@ if submitted:
             }
         ]
     )
-
-    llm_output = remove_think_tags(invoke_llm(raw_input))
+    main_page_prompt=get_main_prompt(raw_input)
+    llm_output=invoke_llm(main_page_prompt)
+    llm_output = remove_think_tags(llm_output)
     raw_input["AI Recommendations"] = llm_output
 
     # Store in session state

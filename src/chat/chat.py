@@ -43,33 +43,36 @@ def get_groq_llm():
         ChatGroq(model_name=model, api_key=api_key, temperature=0.3, max_tokens=1024),
         model,
     )
+def get_main_prompt(df):
+    prompt = f"""
+You are a corrosion control expert assisting engineers in preventing material degradation in industrial environments.
+
+Given the following dataframe:
+{df}
+
+Interpret the corrosion severity using the following scale:
+- A (Resistant): < 0.002 inches/year
+- B (Good): < 0.020 inches/year
+- C (Questionable): 0.020 - 0.050 inches/year
+- D (Poor): > 0.050 inches/year
+
+Generate a concise technical recommendation with a clear bullet-point structure, suitable for field engineers. Your output should include:
+
+- The interpreted corrosion severity class and its implications.
+- Likely causes based on the material and environment.
+- Specific mitigation strategies (e.g., naming coating types, inhibitor types, or environmental controls).
+- Suggested monitoring or tests (e.g., EIS, weight loss, visual inspection).
+- Optional: Practical next steps such as documentation or sharing findings.
+
+Ensure the tone is practical, professional, and clear. Respond in exactly 5 bullet points.
+"""
+    return prompt
 
 
-def invoke_llm(df):
+
+
+def invoke_llm(prompt):
     try:
-        prompt = f"""
-        You are a corrosion control expert assisting engineers in preventing material degradation in industrial environments.
-
-        Given the following dataframe:\n
-        {df}
-
-        Interpret the corrosion severity using the following scale:
-        - A (Resistant): < 0.002 inches/year
-        - B (Good): < 0.020 inches/year
-        - C (Questionable): 0.020 - 0.050 inches/year
-        - D (Poor): > 0.050 inches/year
-
-        Generate a concise technical recommendation with a clear bullet-point structure, suitable for field engineers. Your output should include:
-
-        - The interpreted corrosion severity class and its implications.
-        - Likely causes based on the material and environment.
-        - Specific mitigation strategies (e.g., naming coating types, inhibitor types, or environmental controls).
-        - Suggested monitoring or tests (e.g., EIS, weight loss, visual inspection).
-        - Optional: Practical next steps such as documentation or sharing findings.
-
-        Ensure the tone is practical, professional, and clear. Respond in exactly 5 bullet points.
-        """
-
         groq_llm, llm_name = get_groq_llm()
         response = groq_llm.invoke(prompt)
         return response.content

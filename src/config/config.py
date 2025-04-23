@@ -21,6 +21,7 @@ NOT_COMPOSE_COLUMNS = [
 ]
 CATEGORICAL_COLUMNS = ["Environment"]
 PAGE_ICON = "src/assets/images/corrosive.png"
+PIPE_ICON = "src/assets/images/pipe.png"
 SIDEBAR_IMAGE = (
     "https://www.ddcoatings.co.uk/wp-content/uploads/2019/09/pipeline-corrosion.jpg"
 )
