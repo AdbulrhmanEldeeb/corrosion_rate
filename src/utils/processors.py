@@ -74,5 +74,6 @@ def get_cached_scibert_embedding(text):
     text_hash = hashlib.md5(text.encode()).hexdigest()
     return get_scibert_embedding(text)
 
+
 def remove_think_tags(text):
     return re.sub(r"<think>.*?</think>", "", text, flags=re.DOTALL)

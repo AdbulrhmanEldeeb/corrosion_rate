@@ -43,6 +43,8 @@ def get_groq_llm():
         ChatGroq(model_name=model, api_key=api_key, temperature=0.3, max_tokens=1024),
         model,
     )
+
+
 def get_main_prompt(df):
     prompt = f"""
 You are a corrosion control expert assisting engineers in preventing material degradation in industrial environments.
@@ -67,8 +69,6 @@ Generate a concise technical recommendation with a clear bullet-point structure,
 Ensure the tone is practical, professional, and clear. Respond in exactly 5 bullet points.
 """
     return prompt
-
-
 
 
 def invoke_llm(prompt):

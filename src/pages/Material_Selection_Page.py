@@ -2,14 +2,19 @@ import streamlit as st
 from chat.chat import invoke_llm
 from utils.vars import environment
 from config.config import PIPE_ICON
+from utils.processors import remove_think_tags
 
-st.set_page_config(page_title="Material Selector (LLM)", layout="wide",page_icon=PIPE_ICON)
+st.set_page_config(
+    page_title="Material Selector (LLM)", layout="wide", page_icon=PIPE_ICON
+)
 
 # ------------------------ Sidebar ------------------------
 with st.sidebar:
     st.markdown("## 🧱 Material Selector for Corrosion Resistance")
     st.image("src/assets/images/material_selection.jpeg")
-    st.markdown("Get material suggestions using an LLM based on your corrosion environment.")
+    st.markdown(
+        "Get material suggestions using an LLM based on your corrosion environment."
+    )
     st.markdown("🧠 Powered by LLMs | 🔍 Intelligent Selection")
 
 # ------------------------ Page Header ------------------------
@@ -27,20 +32,35 @@ with st.form("llm_material_selector"):
     col1, col2 = st.columns(2)
 
     with col1:
-        env = st.selectbox("🌍 Environment Type", options=environment, help="e.g., seawater, acidic, alkaline")
+        env = st.selectbox(
+            "🌍 Environment Type",
+            options=environment,
+            help="e.g., seawater, acidic, alkaline",
+        )
         pH = st.number_input("🧪 pH Level", min_value=0.0, max_value=14.0, value=7.0)
-        chloride = st.selectbox("🧂 Chloride Presence", ["None", "Low", "Moderate", "High"])
+        chloride = st.selectbox(
+            "🧂 Chloride Presence", ["None", "Low", "Moderate", "High"]
+        )
         temperature = st.number_input("🌡️ Operating Temperature (°C)", value=25)
         pressure = st.number_input("⚙️ Operating Pressure (bar)", value=1.0)
 
     with col2:
-        flow = st.selectbox("🌊 Flow Condition", ["Static", "Low velocity", "High velocity", "Turbulent"])
+        flow = st.selectbox(
+            "🌊 Flow Condition",
+            ["Static", "Low velocity", "High velocity", "Turbulent"],
+        )
         contact = st.selectbox("🔩 Galvanic Contact with Other Metals?", ["Yes", "No"])
         design_life = st.number_input("📅 Required Design Life (Years)", value=10)
-        maintenance = st.selectbox("🛠️ Maintenance Frequency", ["Low", "Moderate", "High"])
+        maintenance = st.selectbox(
+            "🛠️ Maintenance Frequency", ["Low", "Moderate", "High"]
+        )
         budget = st.selectbox("💰 Budget Constraint", ["None", "Low", "Medium", "High"])
 
-    custom_notes = st.text_area("📝 Additional Notes (Optional)", height=120, placeholder="Any extra details about the environment or design requirements...")
+    custom_notes = st.text_area(
+        "📝 Additional Notes (Optional)",
+        height=120,
+        placeholder="Any extra details about the environment or design requirements...",
+    )
 
     submitted = st.form_submit_button("🔎 Suggest Materials")
 
@@ -77,8 +97,7 @@ Conclude with:
 Use a **professional and concise tone**. Structure your response clearly with bullet points or short paragraphs to enhance readability for engineers in the field.
 """
 
-
-    response = invoke_llm(user_prompt)
+    response = remove_think_tags(invoke_llm(user_prompt))
     st.markdown("## 🧪 Suggested Materials")
     st.success(response)
 
