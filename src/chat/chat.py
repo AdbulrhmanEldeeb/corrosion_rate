@@ -40,7 +40,7 @@ def get_groq_llm():
     """
     api_key, model = get_next_api_and_model()
     return (
-        ChatGroq(model_name=model, api_key=api_key, temperature=0.3, max_tokens=1024),
+        ChatGroq(model_name=model, api_key=api_key, temperature=0.3, max_tokens=512),
         model,
     )
 
